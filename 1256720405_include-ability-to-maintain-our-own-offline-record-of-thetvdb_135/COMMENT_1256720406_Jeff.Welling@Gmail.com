@@ -1,0 +1,1 @@
+There should be an option which when set signals that we want to maintain our own database of series/episode information.  Every search, it updates 'old' entries to maintain that database, and it should have a simple 'update' function which does the samething.
