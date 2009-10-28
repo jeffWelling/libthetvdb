@@ -1,0 +1,130 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"><title>jeffWelling/ParanoidPackrat @ GitHub</title>
+
+<style type="text/css">
+body {
+margin-top: 1.0em;
+background-color: #000000;
+font-family: "Helvetica,Arial,FreeSans"; color: #ffffff;
+}
+#container {
+margin: 0 auto;
+width: 700px;
+}
+h1 { font-size: 3.8em; color: #ebfafe; margin-bottom: 3px; }
+h1 .small { font-size: 0.4em; }
+h1 a { text-decoration: none }
+h2 { font-size: 1.5em; color: #ebfafe; }
+h3 { text-align: center; color: #ebfafe; }
+a { color: #ebfafe; }
+.description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+.download { float: right; }
+pre { background: #000; color: #fff; padding: 15px;}
+hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+.footer { text-align:center; padding-top:30px; font-style: italic; }
+</style>
+</head><body>
+<a href="http://github.com/jeffWelling/ParanoidPackrat"><img style="border: 0pt none ; position: absolute; top: 0pt; right: 0pt;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+<div id="container"><br>
+<h1>Example Usage&nbsp;<span class="small"></span></h1>
+<br>
+First, you need to <a href="http://thetvdb.com/?tab=apiregister">get
+an API key</a> from Thetvdb.com, and place it in a file called
+'apikey.txt' in the same directory as libthetvdb.rb. &nbsp;This key
+is required to form the URLs that the series information is pulled
+from, so you cannot continue until you do this.<br>
+<br>
+If you wanted to use it to search for the term 'Stargate Universe';<br>
+<br>
+<div style="font-family: FreeMono; text-align: left;">irb(main):001:0&gt;
+autoload :Thetvdb, 'libthetvdb.rb'<br>
+=&gt; nil<br>
+irb(main):002:0&gt; pp it=Thetvdb.search('Stargate Universe')<br>
+{"Series"=&gt;<br>
+&nbsp; [{"FirstAired"=&gt;["2009-10-02"],<br>
+&nbsp;&nbsp;&nbsp;
+"banner"=&gt;["graphical/83237-g4.jpg"],<br>
+&nbsp;&nbsp;&nbsp; "language"=&gt;["en"],<br>
+&nbsp;&nbsp;&nbsp; "id"=&gt;["83237"],<br>
+&nbsp;&nbsp;&nbsp; "Overview"=&gt;<br>
+&nbsp;&nbsp;&nbsp;&nbsp; ["After the secret of the
+Stargate's ninth chevron is discovered, a team of explorers from Earth
+travels to the unmanned starship Destiny, which was launched by the
+Ancients centuries ago as an experiment. The new crew, not able to
+control the Destiny's navigation, is forced to complete its original
+mission. They travel far out into the universe, encountering new races
+and enemies."],<br>
+&nbsp;&nbsp;&nbsp; "IMDB_ID"=&gt;["tt1286039"],<br>
+&nbsp;&nbsp;&nbsp; "SeriesName"=&gt;["Stargate
+Universe"],<br>
+&nbsp;&nbsp;&nbsp; "seriesid"=&gt;["83237"],<br>
+&nbsp;&nbsp;&nbsp; "zap2it_id"=&gt;["SH1183982"]}]}<br>
+=&gt; nil<br>
+irb(main):003:0&gt;
+</div>
+<br>
+And then, to populate it's episodes take the tvdbSeriesID, in this
+example 83237, and;<br>
+<br>
+<div style="font-family: FreeMono; text-align: left;">irb(main):003:0&gt;
+pp Thetvdb.getAllEpisodes("83237")<br>
+[{"EpisodeID"=&gt;"S0E1",<br>
+&nbsp; "EpisodeNumber"=&gt;"1",<br>
+&nbsp; "Season"=&gt;"0",<br>
+&nbsp; "SeriesID"=&gt;"83237",<br>
+&nbsp; "EpisodeName"=&gt;"Access All Areas"},<br>
+&nbsp;{"EpisodeID"=&gt;"S1E1",<br>
+&nbsp; "EpisodeNumber"=&gt;"1",<br>
+&nbsp; "Season"=&gt;"1",<br>
+&nbsp; "SeriesID"=&gt;"83237",<br>
+&nbsp; "EpisodeName"=&gt;"Air (1)"},<br>
+<br>
+&nbsp;&nbsp;&nbsp; ...<br>
+<br>
+&nbsp;{"EpisodeID"=&gt;"S1E20",<br>
+&nbsp; "EpisodeNumber"=&gt;"20",<br>
+&nbsp; "Season"=&gt;"1",<br>
+&nbsp; "SeriesID"=&gt;"83237",<br>
+&nbsp; "EpisodeName"=&gt;"Incursion (2)"}]<br>
+=&gt; nil<br>
+irb(main):004:0&gt;
+</div>
+<br>
+Or course you don't have to use 'pp' at the beginning of the commands,
+those were just used in the examples to print the output in a more
+readable way.<br>
+<div class="footer"> get the source code on GitHub : <a href="http://github.com/jeffWelling/libthetvdb">jeffWelling/libthetvdb</a><br>
+<script type="text/javascript">
+//<![CDATA[
+(function() {
+var links = document.getElementsByTagName('a');
+var query = '?';
+for(var i = 0; i < links.length; i++) {
+if(links[i].href.indexOf('#disqus_thread') >= 0) {
+query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+}
+}
+document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/libthetvdb/get_num_replies.js' + query + '"></' + 'script>');
+})();
+//]]>
+</script>
+<br>
+<div id="disqus_thread"></div>
+<script type="text/javascript" src="http://disqus.com/forums/libthetvdb/embed.js"></script>
+<noscript><a
+href="http://disqus.com/forums/libthetvdb/?url=ref">View the
+discussion thread.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">blog
+comments powered by <span class="logo-disqus">Disqus</span></a></div>
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-11094370-4");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+</div>
+</body></html>
