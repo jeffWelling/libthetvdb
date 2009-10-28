@@ -55,10 +55,69 @@ module Thetvdb
       @mirror=initMirror
     end
     attr_reader :apikey, :mirror
-  end
-  #Search Thetvdb.com for str
-  def self.search str
-    XmlSimple.xml_in( agent.get("#{@mirror}/api/GetSeries.php?seriesname=#{ERB::Util.url_encode str}").body )
+
+		#Format results from TVDB
+		#return a hash with the parts we store in the database.
+		def formatTvdbResults( tvdbResults )
+			raise "formatTvdbResults() is not supposed to deal with nil results, sort that out first." if tvdbResults.nil?
+			results=[]
+			tvdbResults['Series'].each_index {|i| tvdbResults['Series'][i].each_key {|item|
+			  results[i]||={}
+				results[i]['tvdbSeriesID'] = \
+					tvdbResults['Series'][i][item] if item=='id'
+				results[i]['imdbID'] = \
+					tvdbResults['Series'][i][item] if item=='IMDB_ID'
+				results[i]['Title'] = \
+					tvdbResults['Series'][i][item] if item=='SeriesName'
+			}}
+			results.each_index {|i|
+				results[i]['EpisodeList']= getAllEpisodes(results[i]['tvdbSeriesID'])
+			}
+			return results
+		end
+
+		def getAllEpisodes( seriesID )
+			raise "getAllEpisodes() only takes seriesID" if seriesID.class==Fixnum
+			episodeList=[]
+
+			regex=/<a href="[^"]*" class="seasonlink">All<\/a>/
+			
+			episodeList=[]
+			#TheTVDB runs slow on weekends soemtimes, dont want to crash fail, retry instead
+			body= XmlSimple.xml_in( agent.get("http://thetvdb.com/api/#{@apikey}/series/#{seriesID}/all/en.xml").body )
+
+			if body.has_key?('Episode')!=TRUE
+				#has no episodeS?
+				puts "#{seriesID} has no episodes?"
+				return []
+			end
+
+			body['Episode'].each {|episode|
+				episode['EpisodeName'][0]='' if episode['EpisodeName'][0].class==Hash
+				episodeList << { 
+					'EpisodeName' => episode['EpisodeName'][0], 
+					'EpisodeNumber' => episode['EpisodeNumber'][0],
+					'Season' => episode['SeasonNumber'][0],
+					'SeriesID' => body['Series'][0]['id'][0],
+					'EpisodeID' => 'S' << episode['SeasonNumber'][0] \
+						<< 'E' << episode['EpisodeNumber'][0]
+				}
+			}
+			return episodeList
+		end
+
+    #Search Thetvdb.com for str
+    def search str, retries=2
+      begin
+        XmlSimple.xml_in( agent.get("#{@mirror}/api/GetSeries.php?seriesname=#{ERB::Util.url_encode str}").body )
+      rescue Errno::ETIMEDOUT => e
+        (retries-=1 and retry) unless retries<=0
+        raise e
+      rescue Timeout::Error => e
+        (retries-=1 and retry) unless retries<=0
+        raise e
+      end
+    end
   end
   initialize
 end
