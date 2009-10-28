@@ -1,0 +1,13 @@
+This is the libthetvdb library.  It provides
+a ruby interface to the TheTvdb.com API.
+http://thetvdb.com/
+This library is in early beta.
+For more information, see;
+http://jeffwelling.github.com/libthetvdb
+
+Written by Jeff Welling.
+Published as GPLv3 Free Software.
+Copyright 2009 Jeff Welling
+This program is distributable under the terms of
+the GPL Version 3.0.
+See COPYING.
