@@ -51,7 +51,8 @@ module Thetvdb
     end
 
     def initialize
-      @apikey=readFile(File.dirname(__FILE__) +'/apikey.txt', 1).first.strip
+      @apikey= File.exist?(File.dirname(__FILE__)+'/apikey.txt') ? readFile(File.dirname(__FILE__) +'/apikey.txt', 1).first.strip : 
+        readFile(File.dirname(__FILE__)+'/../apikey.txt').first.strip
       @mirror=initMirror
     end
     attr_reader :apikey, :mirror
