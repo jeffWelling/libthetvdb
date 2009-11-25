@@ -51,9 +51,16 @@ module Thetvdb
     end
 
     def initialize
-      @apikey= File.exist?(File.dirname(__FILE__)+'/apikey.txt') ? readFile(File.dirname(__FILE__) +'/apikey.txt', 1).first.strip : 
-        readFile(File.dirname(__FILE__)+'/../apikey.txt').first.strip
-      @mirror=initMirror
+      begin
+        @apikey= File.exist?(File.dirname(__FILE__)+'/apikey.txt') ? readFile(File.dirname(__FILE__) +'/apikey.txt', 1).first.strip : 
+          readFile(File.dirname(__FILE__)+'/../apikey.txt').first.strip
+      rescue Errno::ENOENT => e
+        if e.to_s[/No such file.+apikey\.txt/]
+          puts "Egads!  You need to go get an API key from Thetvdb.com and place it in apikey.txt in the libthetvdb/ or libthetvdb/lib/ directory.\nhttp://thetvdb.com/?tab=register\n"
+          raise e
+        end
+        @mirror=initMirror
+      end
     end
     attr_reader :apikey, :mirror
 
