@@ -84,8 +84,12 @@ module Thetvdb
       mirrors_xml = XmlSimple.xml_in agent.get("http://www.thetvdb.com/api/#{@apikey}/mirrors.xml").body
       mirrors_xml['Mirror'][0]['mirrorpath'][0]
     end
+  
+    def mirror
+      @mirror
+    end
 
-    def initialize
+    def start
       begin
         @apikey= File.exist?(File.dirname(__FILE__)+'/apikey.txt') ? readFile(File.dirname(__FILE__) +'/apikey.txt', 1).first.strip : 
           readFile(File.dirname(__FILE__)+'/../apikey.txt').first.strip
@@ -94,8 +98,8 @@ module Thetvdb
           puts "Egads!  You need to go get an API key from Thetvdb.com and place it in apikey.txt in the libthetvdb/ or libthetvdb/lib/ directory.\nhttp://thetvdb.com/?tab=register\n"
           raise e
         end
-        @mirror=initMirror
       end
+      @mirror=initMirror
     end
     attr_reader :apikey, :mirror
 
@@ -152,6 +156,7 @@ module Thetvdb
     #Search Thetvdb.com for str
     def search str, retries=2
       begin
+        url="#{@mirror}/api/GetSeries.php?seriesname=#{ERB::Util.url_encode str}"
         XmlSimple.xml_in( agent.get("#{@mirror}/api/GetSeries.php?seriesname=#{ERB::Util.url_encode str}").body )
       rescue Errno::ETIMEDOUT => e
         (retries-=1 and retry) unless retries<=0
@@ -165,6 +170,6 @@ module Thetvdb
     memoize :search
     memoize :getAllEpisodes
   end
-  initialize
+  start
 end
 
