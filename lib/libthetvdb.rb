@@ -165,6 +165,9 @@ module Thetvdb
       rescue Timeout::Error => e
         (retries-=1 and retry) unless retries<=0
         raise e
+      rescue REXML::ParseException => e
+        #return empty and continue normally, response from Thetvdb is malformed.
+        return []
       end
     end
     extend Memoizable
