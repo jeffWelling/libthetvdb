@@ -155,6 +155,7 @@ module Thetvdb
 
     #Search Thetvdb.com for str
     def search str, retries=2
+      start if mirror.nil?
       begin
         url="#{@mirror}/api/GetSeries.php?seriesname=#{ERB::Util.url_encode str}"
         XmlSimple.xml_in( agent.get("#{@mirror}/api/GetSeries.php?seriesname=#{ERB::Util.url_encode str}").body )
@@ -170,6 +171,5 @@ module Thetvdb
     memoize :search
     memoize :getAllEpisodes
   end
-  start
 end
 
