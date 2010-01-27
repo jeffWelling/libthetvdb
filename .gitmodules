@@ -1,0 +1,3 @@
+[submodule "memoizable"]
+	path = memoizable
+	url = git://github.com/jeffWelling/memoizable.git
